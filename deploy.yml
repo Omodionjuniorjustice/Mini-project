@@ -1,0 +1,26 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Update packages
+      apt:
+        update_cache: yes
+
+    - name: Install Apache
+      apt:
+        name: apache2
+        state: present
+
+    - name: Set timezone to Africa/Lagos
+      timezone:
+        name: Africa/Lagos
+
+    - name: Create HTML file
+      copy:
+        content: "<html><body><h1>Hello from {{ inventory_hostname }}</h1></body></html>"
+        dest: /var/www/html/index.html
+
+    - name: Restart Apache
+      service:
+        name: apache2
+        state: restarted
